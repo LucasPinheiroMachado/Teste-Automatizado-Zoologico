@@ -42,12 +42,10 @@ class RecintosZoo {
   }
 
   analisaRecintos(animal, quantidade) {
-    // Valida se o animal é válido
     if (!this.animaisValidos[animal]) {
       return { erro: 'Animal inválido', recintosViaveis: null };
     }
 
-    // Valida se a quantidade é maior que zero
     if (quantidade <= 0) {
       return { erro: 'Quantidade inválida', recintosViaveis: null };
     }
@@ -62,7 +60,6 @@ class RecintosZoo {
         return total + tamanhoAnimal;
       }, 0);
 
-      // Regras de bioma e espaço suficiente
       if (
         animalInfo.bioma.includes(recinto.bioma) &&
         recinto.tamanhoTotal - espacoOcupado >= animalInfo.tamanho * quantidade
@@ -74,7 +71,6 @@ class RecintosZoo {
           (a) => !this.animaisValidos[a.especie].carnivoro,
         );
 
-        // Carnívoros só convivem com a própria espécie
         if (
           animalInfo.carnivoro &&
           recintosCarnivoros.length > 0 &&
@@ -83,7 +79,6 @@ class RecintosZoo {
           continue;
         }
 
-        // Herbívoros não podem estar no mesmo recinto que carnívoros
         if (!animalInfo.carnivoro && recintosCarnivoros.length > 0) {
           continue;
         }
@@ -95,19 +90,16 @@ class RecintosZoo {
           recinto.bioma !== 'savana e rio' &&
           recinto.animaisExistentes.length > 0
         ) {
-          // Hipopótamo só aceita outras espécies em biomas de savana e rio
           continue;
         }
 
-        // Requisito do espaço extra para recintos com múltiplas espécies
         const especiesNoRecinto = new Set(
           recinto.animaisExistentes.map((a) => a.especie),
         );
         if (especiesNoRecinto.size > 0 && !especiesNoRecinto.has(animal)) {
-          espacoOcupado += 1; // Espaço extra por múltiplas espécies
+          espacoOcupado += 1;
         }
 
-        // Macacos só ficam confortáveis com pelo menos outro animal
         if (
           animal === 'MACACO' &&
           quantidade < 2 &&
@@ -116,7 +108,6 @@ class RecintosZoo {
           continue;
         }
 
-        // Verificar espaço livre após o cálculo de ocupação
         const espacoLivre =
           recinto.tamanhoTotal -
           espacoOcupado -
